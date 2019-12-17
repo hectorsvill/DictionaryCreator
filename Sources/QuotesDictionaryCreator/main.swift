@@ -1,15 +1,15 @@
 import Foundation
 import SwiftSoup
 
-class QuotesDictionaryCreator {
-    var QuotesDictionary: [String: [[String: Any]]] = [:]
+open class QuotesDictionaryCreator {
+    open var QuotesDictionary: [String: [[String: Any]]] = [:]
     
     init () {
         createQuoteDict()
     }
     
     /// Create a dictionary of quotes
-    func createQuoteDict() {
+    open func createQuoteDict() {
          let quoteLinks = getAllQuoteLinks()
          
          for (k, v) in quoteLinks {
