@@ -22,8 +22,7 @@ class QuotesDictionaryCreator {
                  NSLog("Error: \(error)")
              }
          }
-         
-         //    writeJsonToFile()
+         writeJsonToFileOnDesktop()
      }
     
     
