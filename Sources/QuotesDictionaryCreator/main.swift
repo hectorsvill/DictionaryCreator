@@ -1,7 +1,6 @@
 import Foundation
 import SwiftSoup
 
-
 class QuotesDictionaryCreator {
     var QuotesDictionary: [String: [[String: Any]]] = [:]
     
@@ -22,7 +21,8 @@ class QuotesDictionaryCreator {
                  NSLog("Error: \(error)")
              }
          }
-         writeJsonToFileOnDesktop()
+
+//         writeJsonToFileOnDesktop()
      }
     
     
@@ -109,10 +109,4 @@ class QuotesDictionaryCreator {
         }
     }
 }
-
-
-
-
-//QuotesDictionaryCreator()
-
 

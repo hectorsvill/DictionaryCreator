@@ -1,3 +1,3 @@
 # QuotesDictionaryCreator
 
-Scraping Data from wisdomquotes.com to get a dictionary of over 1000 quotes.
+Scraping Data from wisdomquotes.com to get a dictionary of over 34,000 quotes.
