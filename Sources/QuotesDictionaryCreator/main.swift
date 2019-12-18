@@ -3,6 +3,7 @@ import SwiftSoup
 
 open class QuotesDictionaryCreator {
     open var QuotesDictionary: [String: [[String: Any]]] = [:]
+    let url = URL(string: "https://wisdomquotes.com/")!
     
     init () {
         createQuoteDict()
@@ -12,6 +13,7 @@ open class QuotesDictionaryCreator {
     open func createQuoteDict() {
          let quoteLinks = getAllQuoteLinks()
          QuotesDictionary["results"] = []
+        
          for (k, v) in quoteLinks {
              do {
                 let data = try Data(contentsOf: v)
@@ -30,8 +32,6 @@ open class QuotesDictionaryCreator {
     /// get all links to quote from main page
     func getAllQuoteLinks() -> [String: URL] {
         var links: [String: URL] = [:]
-        let url = URL(string: "https://wisdomquotes.com/")!
-           
         let data = try! Data(contentsOf: url)
         let html = String(data: data, encoding: .utf8)!
         
@@ -42,7 +42,7 @@ open class QuotesDictionaryCreator {
             for i in 11..<quoteLinks.count - 9 {
                 let key = try quoteLinks[i].text()
                 let strKey = key.replacingOccurrences(of: " ", with: "-")
-                let urlStr = "https://wisdomquotes.com/" + strKey.lowercased() + "-quotes"
+                let urlStr = url.absoluteString + strKey.lowercased() + "-quotes"
                 links[strKey] = URL(string: urlStr)!
             }
         } catch {
@@ -53,7 +53,7 @@ open class QuotesDictionaryCreator {
     }
     
     /// Scrape quotes with htmlString
-    func scrapeQuotes(html: String, type: String ) {  //-> [[String: Any]] {
+    func scrapeQuotes(html: String, type: String ) {
         let doc  = try! SwiftSoup.parse(html)
         let quoteElements = try! doc.select("blockquote")
         
@@ -80,14 +80,12 @@ open class QuotesDictionaryCreator {
                         temp += (String(str) + " ")
                     }
                     author = temp.trimmingCharacters(in: .whitespaces)
+                } else {
+                    author = "Unknown"
                 }
                 
-                var tags = [type]
-                
-                if !author.isEmpty {
-                    tags.append(author)
-                }
-                
+                let tags = [type, author]
+
                 QuotesDictionary["results"]!.append(["body": body, "author": author, "tags": tags])
             } catch {
                 NSLog("Error: \(error)")
@@ -107,5 +105,6 @@ open class QuotesDictionaryCreator {
         }
     }
 }
+
 
 
