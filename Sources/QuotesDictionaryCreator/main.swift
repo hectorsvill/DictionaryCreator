@@ -16,13 +16,13 @@ open class QuotesDictionaryCreator {
              do {
                  let data = try Data(contentsOf: v)
                  let html = String(data: data, encoding: .utf8)!
-                 QuotesDictionary[k] = scrapeQuotes(html: html)
+                 QuotesDictionary["results"] = scrapeQuotes(html: html, type: k)
              } catch {
                  NSLog("Error: \(error)")
              }
          }
 
-//         writeJsonToFileOnDesktop()
+         writeJsonToFileOnDesktop()
      }
     
     
@@ -52,7 +52,7 @@ open class QuotesDictionaryCreator {
     }
     
     /// Scrape quotes with htmlString
-    func scrapeQuotes(html: String ) -> [[String: Any]] {
+    func scrapeQuotes(html: String, type: String ) -> [[String: Any]] {
         let doc  = try! SwiftSoup.parse(html)
         let quoteElements = try! doc.select("blockquote")
         var quotes: [[String: Any]] = []
@@ -82,7 +82,7 @@ open class QuotesDictionaryCreator {
                     author = temp.trimmingCharacters(in: .whitespaces)
                 }
                 
-                var tags = ["history"]
+                var tags = [type]
                 
                 if !author.isEmpty {
                     tags.append(author)
