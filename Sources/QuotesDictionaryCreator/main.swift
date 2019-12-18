@@ -11,12 +11,13 @@ open class QuotesDictionaryCreator {
     /// Create a dictionary of quotes
     open func createQuoteDict() {
          let quoteLinks = getAllQuoteLinks()
-         
+         QuotesDictionary["results"] = []
          for (k, v) in quoteLinks {
              do {
-                 let data = try Data(contentsOf: v)
-                 let html = String(data: data, encoding: .utf8)!
-                 QuotesDictionary["results"] = scrapeQuotes(html: html, type: k)
+                let data = try Data(contentsOf: v)
+                let html = String(data: data, encoding: .utf8)!
+                
+                scrapeQuotes(html: html, type: k)
              } catch {
                  NSLog("Error: \(error)")
              }
@@ -52,17 +53,16 @@ open class QuotesDictionaryCreator {
     }
     
     /// Scrape quotes with htmlString
-    func scrapeQuotes(html: String, type: String ) -> [[String: Any]] {
+    func scrapeQuotes(html: String, type: String ) {  //-> [[String: Any]] {
         let doc  = try! SwiftSoup.parse(html)
         let quoteElements = try! doc.select("blockquote")
-        var quotes: [[String: Any]] = []
         
         for i in 0..<quoteElements.count {
             do {
                 let str = try quoteElements[i].text()
                 let quoteAndAuth = str.split(separator: ".")
-                
                 var body = String(quoteAndAuth[0])
+                
                 for i in 0..<quoteAndAuth.count - 1 {
                     body += String(quoteAndAuth[i]) + "."
                 }
@@ -88,13 +88,11 @@ open class QuotesDictionaryCreator {
                     tags.append(author)
                 }
                 
-                quotes.append(["body": body, "author": author, "tags": tags])
+                QuotesDictionary["results"]!.append(["body": body, "author": author, "tags": tags])
             } catch {
                 NSLog("Error: \(error)")
             }
         }
-        
-        return quotes
     }
     
     /// Write dictionary as jason file on desktop
@@ -109,4 +107,5 @@ open class QuotesDictionaryCreator {
         }
     }
 }
+
 
